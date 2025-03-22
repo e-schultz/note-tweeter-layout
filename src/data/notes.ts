@@ -1,4 +1,3 @@
-
 export interface Note {
   id: string;
   title: string;
@@ -6,6 +5,8 @@ export interface Note {
   tags: string[];
   createdAt: Date;
   updatedAt: Date;
+  threadId?: string;
+  replies?: Note[];
 }
 
 export const sampleNotes: Note[] = [
@@ -15,7 +16,27 @@ export const sampleNotes: Note[] = [
     content: "Design thinking is a non-linear, iterative process that teams use to understand users, challenge assumptions, redefine problems and create innovative solutions to prototype and test. Involving five phases—Empathize, Define, Ideate, Prototype and Test—it is most useful to tackle problems that are ill-defined or unknown.",
     tags: ["design", "process", "creativity"],
     createdAt: new Date("2023-10-15"),
-    updatedAt: new Date("2023-10-15")
+    updatedAt: new Date("2023-10-15"),
+    replies: [
+      {
+        id: "1-1",
+        title: "Reply to Design Thinking",
+        content: "I find the Empathize phase particularly important. Without truly understanding user needs, the solutions we design might miss the mark completely.",
+        tags: ["design", "empathy"],
+        createdAt: new Date("2023-10-16"),
+        updatedAt: new Date("2023-10-16"),
+        threadId: "1"
+      },
+      {
+        id: "1-2",
+        title: "Another thought on Design Thinking",
+        content: "The iteration aspect is what makes design thinking so powerful. It's not a linear process - you can always go back and refine based on new insights.",
+        tags: ["design", "iteration"],
+        createdAt: new Date("2023-10-17"),
+        updatedAt: new Date("2023-10-17"),
+        threadId: "1"
+      }
+    ]
   },
   {
     id: "2",
@@ -66,3 +87,17 @@ export const sampleNotes: Note[] = [
     updatedAt: new Date("2023-11-12")
   }
 ];
+
+export const findNoteById = (id: string, notes: Note[] = sampleNotes): Note | undefined => {
+  const topLevelNote = notes.find(note => note.id === id);
+  if (topLevelNote) return topLevelNote;
+  
+  for (const note of notes) {
+    if (note.replies && note.replies.length > 0) {
+      const foundInReplies = findNoteById(id, note.replies);
+      if (foundInReplies) return foundInReplies;
+    }
+  }
+  
+  return undefined;
+};

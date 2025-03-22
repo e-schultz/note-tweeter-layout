@@ -9,6 +9,14 @@ const Index = () => {
       id: "1",
       text: "This is an example note. You can drag it to reorder, edit, or delete it.",
       timestamp: new Date(),
+      replies: [
+        {
+          id: "1-1",
+          text: "This is a reply to the first note. You can add multiple replies to create a thread.",
+          timestamp: new Date(Date.now() - 3600000), // 1 hour ago
+          threadId: "1"
+        }
+      ]
     },
   ]);
 
