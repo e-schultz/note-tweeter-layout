@@ -1,7 +1,9 @@
-
+visit: https://note-tweeter-layout.lovable.app/
+project: https://lovable.dev/projects/5c2560a0-3926-4401-a75e-7b0a2542440e
 # Note Tweeter - Interactive Note Taking App
 
-![Note Tweeter App](https://placehold.co/600x400?text=Note+Tweeter+App)
+<img width="1035" alt="Screenshot 2025-04-18 at 10 04 32 AM" src="https://github.com/user-attachments/assets/b62070bc-b885-48bd-8ac4-be7809c2341a" />
+
 
 ## Project Description
 
