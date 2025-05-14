@@ -1,3 +1,4 @@
+
 export interface Note {
   id: string;
   title: string;
@@ -7,6 +8,7 @@ export interface Note {
   updatedAt: Date;
   threadId?: string;
   replies?: Note[];
+  connectedThreadIds?: string[]; // New property for connecting threads
 }
 
 export const sampleNotes: Note[] = [
@@ -17,6 +19,7 @@ export const sampleNotes: Note[] = [
     tags: ["design", "process", "creativity"],
     createdAt: new Date("2023-10-15"),
     updatedAt: new Date("2023-10-15"),
+    connectedThreadIds: ["2", "3"], // Connecting to Atomic Design and Dieter Rams' Principles
     replies: [
       {
         id: "1-1",
@@ -44,7 +47,8 @@ export const sampleNotes: Note[] = [
     content: "Atomic design is a methodology for creating design systems. There are five distinct levels in atomic design: Atoms, Molecules, Organisms, Templates, Pages. These help to create interface design systems in a more deliberate and hierarchical manner.",
     tags: ["design", "methodology", "systems"],
     createdAt: new Date("2023-10-18"),
-    updatedAt: new Date("2023-10-20")
+    updatedAt: new Date("2023-10-20"),
+    connectedThreadIds: ["1", "5"] // Connecting to Design Thinking and Whitespace
   },
   {
     id: "3",
@@ -52,7 +56,8 @@ export const sampleNotes: Note[] = [
     content: "Good design is innovative. Good design makes a product useful. Good design is aesthetic. Good design makes a product understandable. Good design is unobtrusive. Good design is honest. Good design is long-lasting. Good design is thorough down to the last detail. Good design is environmentally-friendly. Good design is as little design as possible.",
     tags: ["design", "principles", "minimalism"],
     createdAt: new Date("2023-10-22"),
-    updatedAt: new Date("2023-10-22")
+    updatedAt: new Date("2023-10-22"),
+    connectedThreadIds: ["1", "4"] // Connecting to Design Thinking and Jony Ive
   },
   {
     id: "4",
@@ -60,7 +65,8 @@ export const sampleNotes: Note[] = [
     content: "Simplicity is not the absence of clutter; that's a consequence of simplicity. Simplicity is somehow essentially describing the purpose and place of an object and product. The absence of clutter is just a clutter-free product. That's not simple.",
     tags: ["design", "simplicity", "apple"],
     createdAt: new Date("2023-10-25"),
-    updatedAt: new Date("2023-10-27")
+    updatedAt: new Date("2023-10-27"),
+    connectedThreadIds: ["3", "6"] // Connecting to Dieter Rams and Typography
   },
   {
     id: "5",
@@ -68,7 +74,8 @@ export const sampleNotes: Note[] = [
     content: "Whitespace is the empty space between elements in a design composition. Despite its name, whitespace doesn't need to be white. It's found in the margins, padding, and spaces between columns, lines of text, graphics, and other elements. Whitespace creates balance, helps with visual hierarchy, improves readability, and creates a feeling of sophistication.",
     tags: ["design", "whitespace", "composition"],
     createdAt: new Date("2023-11-01"),
-    updatedAt: new Date("2023-11-02")
+    updatedAt: new Date("2023-11-02"),
+    connectedThreadIds: ["2", "7"] // Connecting to Atomic Design and Color Theory
   },
   {
     id: "6",
@@ -76,7 +83,8 @@ export const sampleNotes: Note[] = [
     content: "Typography is a critical component of user interface design. It's not just about making the text readable, but also about conveying the right emotion and personality. The choice of typeface, font size, line height, letter spacing, and color all contribute to the overall user experience.",
     tags: ["design", "typography", "UI"],
     createdAt: new Date("2023-11-05"),
-    updatedAt: new Date("2023-11-05")
+    updatedAt: new Date("2023-11-05"),
+    connectedThreadIds: ["4", "7"] // Connecting to Jony Ive and Color Theory
   },
   {
     id: "7",
@@ -84,7 +92,8 @@ export const sampleNotes: Note[] = [
     content: "Color theory is both the science and art of using color. It explains how humans perceive color, and the visual effects of how colors mix, match or contrast with each other. Color theory also involves the messages colors communicate and the methods used to replicate color.",
     tags: ["design", "color", "theory"],
     createdAt: new Date("2023-11-10"),
-    updatedAt: new Date("2023-11-12")
+    updatedAt: new Date("2023-11-12"),
+    connectedThreadIds: ["5", "6"] // Connecting to Whitespace and Typography
   }
 ];
 
@@ -101,3 +110,14 @@ export const findNoteById = (id: string, notes: Note[] = sampleNotes): Note | un
   
   return undefined;
 };
+
+// New function to find connected threads
+export const findConnectedThreads = (noteId: string, notes: Note[] = sampleNotes): Note[] => {
+  const note = findNoteById(noteId, notes);
+  if (!note || !note.connectedThreadIds || note.connectedThreadIds.length === 0) {
+    return [];
+  }
+  
+  return notes.filter(n => note.connectedThreadIds?.includes(n.id));
+};
+

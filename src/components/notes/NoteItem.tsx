@@ -1,11 +1,10 @@
-
 import { useState } from "react";
 import { Note } from "@/data/notes";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { format } from "date-fns";
-import { Trash2, Pencil, Save, X, MessageSquare, ChevronDown, ChevronUp } from "lucide-react";
+import { Trash2, Pencil, Save, X, MessageSquare, ChevronDown, ChevronUp, Link } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { NoteReply } from "./NoteReply";
 
@@ -16,6 +15,7 @@ interface NoteItemProps {
   onCreateReply: (parentId: string, reply: Note) => void;
   onDeleteReply: (parentId: string, replyId: string) => void;
   onUpdateReply: (parentId: string, reply: Note) => void;
+  onSelect?: () => void;
 }
 
 export const NoteItem = ({ 
@@ -24,7 +24,8 @@ export const NoteItem = ({
   onUpdate, 
   onCreateReply,
   onDeleteReply,
-  onUpdateReply
+  onUpdateReply,
+  onSelect
 }: NoteItemProps) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editTitle, setEditTitle] = useState(note.title);
@@ -76,8 +77,27 @@ export const NoteItem = ({
     onUpdateReply(note.id, updatedReply);
   };
 
+  const handleCardClick = (e: React.MouseEvent) => {
+    const target = e.target as HTMLElement;
+    // Only select if clicking on the card itself, not on buttons or inputs
+    if (
+      target.tagName !== 'BUTTON' && 
+      !target.closest('button') && 
+      target.tagName !== 'INPUT' && 
+      target.tagName !== 'TEXTAREA' &&
+      !isEditing &&
+      !isReplying &&
+      onSelect
+    ) {
+      onSelect();
+    }
+  };
+
   return (
-    <Card className="group relative animate-fade-in hover:shadow-md transition-all">
+    <Card 
+      className="group relative animate-fade-in hover:shadow-md transition-all"
+      onClick={handleCardClick}
+    >
       <CardContent className="p-4">
         {isEditing ? (
           <div className="space-y-3">
@@ -165,6 +185,16 @@ export const NoteItem = ({
                         {tag}
                       </Badge>
                     ))}
+                  </div>
+                </div>
+              )}
+              
+              {note.connectedThreadIds && note.connectedThreadIds.length > 0 && (
+                <div className="flex items-center gap-1">
+                  <span>•</span>
+                  <div className="flex items-center">
+                    <Link size={13} className="mr-1" />
+                    <span>{note.connectedThreadIds.length}</span>
                   </div>
                 </div>
               )}

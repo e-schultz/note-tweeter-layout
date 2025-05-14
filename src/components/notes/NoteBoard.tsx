@@ -7,9 +7,10 @@ import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 
 interface NoteBoardProps {
   initialNotes: Note[];
+  onSelectNote?: (note: Note) => void;
 }
 
-export const NoteBoard = ({ initialNotes }: NoteBoardProps) => {
+export const NoteBoard = ({ initialNotes, onSelectNote }: NoteBoardProps) => {
   const [notes, setNotes] = useState<Note[]>(initialNotes);
 
   const handleDragEnd = (result: any) => {
@@ -117,6 +118,7 @@ export const NoteBoard = ({ initialNotes }: NoteBoardProps) => {
                         onCreateReply={handleCreateReply}
                         onDeleteReply={handleDeleteReply}
                         onUpdateReply={handleUpdateReply}
+                        onSelect={onSelectNote ? () => onSelectNote(note) : undefined}
                       />
                     </div>
                   )}

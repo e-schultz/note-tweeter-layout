@@ -1,31 +1,44 @@
 
 import { useState, useEffect } from "react";
-import { Note } from "@/data/notes";
+import { Note, findConnectedThreads } from "@/data/notes";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 import { Tag, Clock, Share2, MoreHorizontal, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { ThreadConnection } from "./ThreadConnection";
 
 interface NoteDetailProps {
   note?: Note;
   onBack?: () => void;
   className?: string;
   isMobile?: boolean;
+  onSelectNote?: (note: Note) => void;
 }
 
 export const NoteDetail = ({ 
   note, 
   onBack,
   className,
-  isMobile = false
+  isMobile = false,
+  onSelectNote
 }: NoteDetailProps) => {
   const [mounted, setMounted] = useState(false);
+  const [connectedNotes, setConnectedNotes] = useState<Note[]>([]);
 
   useEffect(() => {
     setMounted(true);
     return () => setMounted(false);
   }, []);
+
+  useEffect(() => {
+    if (note) {
+      const connected = findConnectedThreads(note.id);
+      setConnectedNotes(connected);
+    } else {
+      setConnectedNotes([]);
+    }
+  }, [note]);
 
   if (!note) {
     return (
@@ -88,6 +101,17 @@ export const NoteDetail = ({
               {note.content}
             </p>
           </div>
+          
+          {connectedNotes.length > 0 && (
+            <ThreadConnection 
+              note={note} 
+              connectedNotes={connectedNotes} 
+              onSelectNote={(selectedNote) => {
+                if (onSelectNote) onSelectNote(selectedNote);
+              }}
+              className="mt-8"
+            />
+          )}
         </div>
       </div>
     </div>
