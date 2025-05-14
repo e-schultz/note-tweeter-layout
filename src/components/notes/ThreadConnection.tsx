@@ -4,7 +4,7 @@ import { Note } from "@/data/notes";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
-import { layers, Link } from "lucide-react";
+import { Layers, Link } from "lucide-react";
 
 interface ThreadConnectionProps {
   note: Note;
@@ -29,7 +29,7 @@ export const ThreadConnection = ({
         className="flex items-center gap-2 text-sm font-medium text-muted-foreground cursor-pointer hover:text-foreground transition-colors"
         onClick={() => setIsExpanded(!isExpanded)}
       >
-        <layers size={16} />
+        <Layers size={16} />
         <span>Connected Threads ({connectedNotes.length})</span>
       </div>
       
